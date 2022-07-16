@@ -7,7 +7,7 @@ import {
 /**
  * A class which simplifies mocking of interfaces and classes alike.
  */
-class Mock<T extends Record<string, unknown>> {
+class Mock<T> {
     private readonly propertyConfigMap: Record<keyof T, ConfigureableMock>;
 
     private readonly _object: T;
@@ -30,7 +30,11 @@ class Mock<T extends Record<string, unknown>> {
      */
     clearCalls = (): void => {
         for (const key of Object.keys(this.propertyConfigMap)) {
-            this.propertyConfigMap[key].resetCallCount();
+            const obj = this.propertyConfigMap as Record<
+                string,
+                ConfigureableMock
+            >;
+            obj[key].resetCallCount();
         }
     };
 
