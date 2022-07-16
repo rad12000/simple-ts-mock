@@ -22,6 +22,8 @@ export class ConfigureValue<T, K extends keyof T> implements ConfigureableMock {
     set(value: FieldOrNeverReturnType<T[K]>, retain = false): void {
         const obj = this.objectInstance as Record<string, unknown>;
         const privateKey = `_${this.property.toString()}`;
+
+        // Set the private value
         obj[privateKey] = value;
         Object.defineProperty(this.objectInstance, this.property, {
             get: () => {
@@ -29,7 +31,10 @@ export class ConfigureValue<T, K extends keyof T> implements ConfigureableMock {
 
                 let returnValue = obj[privateKey];
                 if (!retain) {
-                    if (typeof obj[privateKey] === "object") {
+                    if (
+                        obj[privateKey] !== null &&
+                        typeof obj[privateKey] === "object"
+                    ) {
                         returnValue = Array.isArray(obj[privateKey])
                             ? [...(obj[privateKey] as [])]
                             : { ...(obj[privateKey] as object) };
@@ -43,6 +48,7 @@ export class ConfigureValue<T, K extends keyof T> implements ConfigureableMock {
             set: (val) => {
                 obj[privateKey] = val;
             },
+            configurable: true,
         });
     }
 

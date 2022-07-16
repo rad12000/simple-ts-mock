@@ -43,12 +43,12 @@ export class ConfigureReturn<T, K extends keyof T>
         value: Awaited<MethodOrNeverReturnType<T[K]>>,
         retain = false
     ): void {
-        const propertyValueWrapper = async () => {
+        const propertyValueWrapper = () => {
             this.methodCallsCount++;
             if (!retain) {
                 (this.objectInstance[this.property] as unknown) = null;
             }
-            return value;
+            return Promise.resolve(value);
         };
 
         (this.objectInstance[this.property] as unknown) = propertyValueWrapper;

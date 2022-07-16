@@ -22,13 +22,13 @@ class Mock<T> {
      * @param method The method to check the number of calls on.
      * @returns The number of times the method was called.
      */
-    calledCount = (method: keyof T): number =>
+    getCallCount = (method: keyof T): number =>
         this.propertyConfigMap[method]?.getCallCount() ?? 0;
 
     /**
      * Clears call count for all methods.
      */
-    clearCalls = (): void => {
+    resetCallCount = (): void => {
         for (const key of Object.keys(this.propertyConfigMap)) {
             const obj = this.propertyConfigMap as Record<
                 string,
