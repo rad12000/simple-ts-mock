@@ -1,32 +1,33 @@
 {
-  "name": "simple-js-mock",
-  "version": "1.0.1",
-  "description": "A small package to make mocking interfaces and classes more simple. And it's totally testing framework agnostic!",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "scripts": {
-    "test": "jest"
-  },
-  "keywords": [
-    "js",
-    "test",
-    "moq",
-    "mock",
-    "mocking",
-    "testing",
-    "mocha",
-    "jasmine",
-    "jest"
-  ],
-  "author": "Chad Bekmezian",
-  "license": "ISC",
-  "repository": {
-    "url": "https://github.com/rad12000/simple-js-mock"
-  },
-  "devDependencies": {
-    "@types/jest": "^28.1.6",
-    "jest": "^28.1.3",
-    "ts-jest": "^28.0.6",
-    "typescript": "^4.7.4"
-  }
+    "name": "simple-js-mock",
+    "version": "1.0.1",
+    "description": "A small package to make mocking interfaces and classes more simple. And it's totally testing framework agnostic!",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
+    "scripts": {
+        "test": "jest",
+        "build": "tsc"
+    },
+    "keywords": [
+        "js",
+        "test",
+        "moq",
+        "mock",
+        "mocking",
+        "testing",
+        "mocha",
+        "jasmine",
+        "jest"
+    ],
+    "author": "Chad Bekmezian",
+    "license": "ISC",
+    "repository": {
+        "url": "https://github.com/rad12000/simple-js-mock"
+    },
+    "devDependencies": {
+        "@types/jest": "^28.1.6",
+        "jest": "^28.1.3",
+        "ts-jest": "^28.0.6",
+        "typescript": "^4.7.4"
+    }
 }
