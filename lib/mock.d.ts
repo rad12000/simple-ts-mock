@@ -1,5 +1,5 @@
 import { ConfigureReturn, ConfigureValue } from "./configureables";
-declare class Mock<T extends Record<string, unknown>> {
+declare class Mock<T> {
     private readonly propertyConfigMap;
     private readonly _object;
     constructor();
