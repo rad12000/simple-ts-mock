@@ -18,17 +18,17 @@ class Mock<T> {
     }
 
     /**
-     * Gets the number of calls for a given method.
-     * @param method The method to check the number of calls on.
+     * Gets the number of calls for a given property.
+     * @param property The property to check the number of calls on.
      * @returns The number of times the method was called.
      */
-    getCallCount = (method: keyof T): number =>
-        this.propertyConfigMap[method]?.getCallCount() ?? 0;
+    getCallCount = (property: keyof T): number =>
+        this.propertyConfigMap[property]?.getCallCount() ?? 0;
 
     /**
      * Clears call count for all methods.
      */
-    resetCallCount = (): void => {
+    resetCallCount(): void {
         for (const key of Object.keys(this.propertyConfigMap)) {
             const obj = this.propertyConfigMap as Record<
                 string,
@@ -36,13 +36,15 @@ class Mock<T> {
             >;
             obj[key].resetCallCount();
         }
-    };
+    }
 
     /**
      * Get the mocked object.
      * @returns The mocked instance of @type {T}
      */
-    object: () => T = (): T => this._object;
+    object(): T {
+        return this._object;
+    }
 
     /**
      * Sets up a method to mock.
