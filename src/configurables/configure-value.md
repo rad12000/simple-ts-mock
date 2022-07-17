@@ -11,7 +11,7 @@ Method to set the return value. Accepts an optional `retain` parameter which det
 **Example:**
 
 ```typescript
-classMock.setupValue("someFieldKey").("my return value", false);
+classMock.setupValue("someFieldKey").set("my return value", false);
 ```
 
 **Returns:**
