@@ -1,4 +1,4 @@
-import { ConfigureReturn, ConfigureValue } from "./configureables";
+import { ConfigureReturn, ConfigureValue } from "./configurables";
 declare class Mock<T> {
     private readonly propertyConfigMap;
     private readonly _object;

@@ -2,7 +2,7 @@ import {
     ConfigureableMock,
     ConfigureReturn,
     ConfigureValue,
-} from "./configureables";
+} from "./configurables";
 
 /**
  * A class which simplifies mocking of interfaces and classes alike.

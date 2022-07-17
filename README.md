@@ -64,4 +64,8 @@ test("UserProvider returns true when user retrieved successfully", async () => {
 
 ### **[Mock\<T\>](./src/mock.md)**
 
+### **[ConfigureReturn\<T, K\>](./src/configurables/configure-return.md)**
+
+### **[ConfigureValue\<T, K\>](./src/configurables/configure-value.md)**
+
 The class used to create a new mock of the given type.
