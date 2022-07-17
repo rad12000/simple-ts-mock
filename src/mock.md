@@ -30,7 +30,7 @@ classMock.setupMethod("someClassMethodName");
 
 **Returns:**
 
-`ConfigureReturn<T, K>`
+[ConfigureReturn\<T, K\>](./configureables/configure-return.md)
 
 ---
 
@@ -46,7 +46,7 @@ classMock.setupField("someClassMethodName");
 
 **Returns:**
 
-`ConfigureValue<T, K>`
+[ConfigureValue\<T, K\>](./configureables/configure-value.md)
 
 ---
 
