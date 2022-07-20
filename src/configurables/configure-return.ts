@@ -1,95 +1,71 @@
-import { MethodOrNeverReturnType } from "../types";
 import { ConfigureableMock } from "./configureable-mock.interface";
 
-export class ConfigureReturn<T, K extends keyof T>
-    implements ConfigureableMock
-{
+export class ConfigureReturn<R> implements ConfigureableMock<R> {
     private methodCallsCount: number;
 
-    private readonly property: K;
-    private readonly objectInstance: T;
+    private readonly propertyName: string;
+    private readonly objectInstance: Record<string, unknown>;
+    private readonly params: unknown[];
 
-    constructor(objectInstance: T, property: K) {
+    constructor(
+        objectInstance: Record<string, unknown>,
+        propertyName: string,
+        params: unknown[]
+    ) {
         this.objectInstance = objectInstance;
-        this.property = property;
+        this.propertyName = propertyName;
+        this.params = params;
         this.methodCallsCount = 0;
     }
 
-    /**
-     * Configures the return value for the given method.
-     * @param value The value to return.
-     * @param retain A boolean which determines if the mocked return value
-     * should be kept for future calls. Default: false.
-     */
-    returns(value: MethodOrNeverReturnType<T[K]>, retain = false): void {
+    returns(value: R, retain = false): void {
         const propertyValueWrapper = () => {
             this.methodCallsCount++;
             if (!retain) {
-                (this.objectInstance[this.property] as unknown) = null;
+                this.objectInstance[this.propertyName] = null;
             }
             return value;
         };
 
-        (this.objectInstance[this.property] as unknown) = propertyValueWrapper;
+        this.objectInstance[this.propertyName] = propertyValueWrapper;
     }
 
-    /**
-     * Configures the return value for the given method.
-     * @param value The value to return.
-     * @param retain A boolean which determines if the mocked return value
-     * should be kept for future calls. Default: false.
-     */
-    returnsAsync(
-        value: Awaited<MethodOrNeverReturnType<T[K]>>,
-        retain = false
-    ): void {
+    returnsAsync(value: Awaited<R>, retain = false): void {
         const propertyValueWrapper = () => {
             this.methodCallsCount++;
             if (!retain) {
-                (this.objectInstance[this.property] as unknown) = null;
+                this.objectInstance[this.propertyName] = null;
             }
             return Promise.resolve(value);
         };
 
-        (this.objectInstance[this.property] as unknown) = propertyValueWrapper;
+        this.objectInstance[this.propertyName] = propertyValueWrapper;
     }
 
-    /**
-     * Configures an error to be thrown by the given method.
-     * @param error The error to be thrown.
-     * @param retain A boolean which determines if the mocked return value
-     * should be kept for future calls. Default: false.
-     */
     throws(error: Error, retain = false): void {
         const propertyValueWrapper = () => {
             this.methodCallsCount++;
             if (!retain) {
-                (this.objectInstance[this.property] as unknown) = null;
+                this.objectInstance[this.propertyName] = null;
             }
 
             throw error;
         };
 
-        (this.objectInstance[this.property] as unknown) = propertyValueWrapper;
+        this.objectInstance[this.propertyName] = propertyValueWrapper;
     }
 
-    /**
-     * Configures an error to be thrown by the given method.
-     * @param error The error to be thrown.
-     * @param retain A boolean which determines if the mocked return value
-     * should be kept for future calls. Default: false.
-     */
     throwsAsync(error: Error, retain = false): void {
         const propertyValueWrapper = async () => {
             this.methodCallsCount++;
             if (!retain) {
-                (this.objectInstance[this.property] as unknown) = null;
+                this.objectInstance[this.propertyName] = null;
             }
 
             throw error;
         };
 
-        (this.objectInstance[this.property] as unknown) = propertyValueWrapper;
+        this.objectInstance[this.propertyName] = propertyValueWrapper;
     }
 
     getCallCount = (): number => this.methodCallsCount;

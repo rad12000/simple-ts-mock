@@ -34,8 +34,11 @@ for (const testCase of testCases) {
         // Arrange
         const expectedValue = testCase.expectedValue;
         mockObj
-            .setupField(testCase.propKey as unknown as keyof Cook)
-            .set(expectedValue, true);
+            .setup(
+                (c) =>
+                    (c as unknown as Record<string, unknown>)[testCase.propKey]
+            )
+            .returns(expectedValue, true);
 
         // Act
         const actualValue =
@@ -92,8 +95,11 @@ for (const testCase of testCases) {
         // Arrange
         const expectedValue = testCase.expectedValue;
         mockObj
-            .setupField(testCase.propKey as unknown as keyof Cook)
-            .set(expectedValue);
+            .setup(
+                (c) =>
+                    (c as unknown as Record<string, unknown>)[testCase.propKey]
+            )
+            .returns(expectedValue);
 
         // Act
         const setValue =
@@ -114,7 +120,7 @@ test("returnsAsync works as expected", async () => {
     // Arrange
     const expected = 43;
     const mockObj = new Mock<Cook>();
-    mockObj.setupMethod("getCookTime").returnsAsync(expected);
+    mockObj.setup((c) => c.getCookTime()).returnsAsync(expected);
 
     // Act
     const actual = await mockObj.object().getCookTime();
@@ -128,7 +134,7 @@ test("returns works as expected", () => {
     // Arrange
     const expected = true;
     const mockObj = new Mock<Cook>();
-    mockObj.setupMethod("isCooked").returns(expected);
+    mockObj.setup((c) => c.isCooked()).returns(expected);
 
     // Act
     const actual = mockObj.object().isCooked();
@@ -142,10 +148,10 @@ test("returns works as expected and retains as expected", () => {
     // Arrange
     const expected = true;
     const retainMockObj = new Mock<Cook>();
-    retainMockObj.setupMethod("isCooked").returns(expected, true);
+    retainMockObj.setup((c) => c.isCooked()).returns(expected, true);
 
     const noRetainMockObj = new Mock<Cook>();
-    noRetainMockObj.setupMethod("isCooked").returns(expected);
+    noRetainMockObj.setup((c) => c.isCooked()).returns(expected);
 
     // Act
     const retainVal1 = retainMockObj.object().isCooked();
@@ -165,10 +171,10 @@ test("returnsAsync works as expected and retains as expected", async () => {
     // Arrange
     const expected = 42;
     const retainMockObj = new Mock<Cook>();
-    retainMockObj.setupMethod("getCookTime").returnsAsync(expected, true);
+    retainMockObj.setup((c) => c.getCookTime()).returnsAsync(expected, true);
 
     const noRetainMockObj = new Mock<Cook>();
-    noRetainMockObj.setupMethod("getCookTime").returnsAsync(expected);
+    noRetainMockObj.setup((c) => c.getCookTime()).returnsAsync(expected);
 
     // Act
     const retainVal1 = await retainMockObj.object().getCookTime();
@@ -188,8 +194,8 @@ test("setupMethod count is reset", async () => {
     // Arrange
     const timesToCall = 3;
     const mockObj = new Mock<Cook>();
-    mockObj.setupMethod("getCookTime").returnsAsync(32, true);
-    mockObj.setupMethod("isCooked").returnsAsync(false, true);
+    mockObj.setup((c) => c.getCookTime()).returnsAsync(32, true);
+    mockObj.setup((c) => c.isCooked()).returnsAsync(false, true);
 
     // Act
     for (let i = 0; i < timesToCall; i++) {
