@@ -47,13 +47,13 @@ test("UserProvider returns true when user retrieved successfully", async () => {
     const mockService = new Mock<UserService>();
     const userProvider = new UserProvider(mockService.object());
     const expected = true;
-    mockService.setupMethod("getUser").returnsAsync(new User());
+    mockService.setup((s) => s.getUser()).returnsAsync(new User());
 
     // Act
     const actual = await userProvider.doUserStuff(123);
 
     // Assert
-    expect(mockService.getCallCount("getUser")).toEqual(1);
+    expect(mockService.getCallCount((s) => s.getUser())).toEqual(1);
     expect(actual).toEqual(expected);
 });
 ```
@@ -64,8 +64,4 @@ test("UserProvider returns true when user retrieved successfully", async () => {
 
 ### **[Mock\<T\>](./src/mock.md)**
 
-### **[ConfigureReturn\<T, K\>](./src/configurables/configure-return.md)**
-
-### **[ConfigureValue\<T, K\>](./src/configurables/configure-value.md)**
-
-The class used to create a new mock of the given type.
+### **[ConfigurableMock](./src/configurables/configurable-mock.md)**

@@ -1,4 +1,4 @@
-import { ConfigureableMock } from "./configureable-mock.interface";
+import { ConfigureableMock } from "./configurable-mock.interface";
 
 export class ConfigureValue<R> implements ConfigureableMock<R> {
     private memberAccessedCount: number;

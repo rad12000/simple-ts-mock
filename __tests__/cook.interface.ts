@@ -9,5 +9,5 @@ export interface Cook {
 
     isCooked: () => boolean;
 
-    getCookTime: () => number;
+    getCookTime: () => Promise<number>;
 }

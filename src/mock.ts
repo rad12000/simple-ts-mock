@@ -19,11 +19,35 @@ class Mock<T> {
 
     /**
      * Gets the number of calls for a given property.
-     * @param property The property to check the number of calls on.
+     * @param configure The property to check the number of calls on.
      * @returns The number of times the method was called.
      */
-    getCallCount = (property: keyof T): number =>
-        this.propertyConfigMap[property.toString()]?.getCallCount() ?? 0;
+
+    getCallCount<R>(configure: (instance: T) => R): number {
+        const mockConfig: {
+            isMethod: boolean;
+            params: unknown[];
+            propName: string;
+        } = { isMethod: false, params: [], propName: "" };
+
+        // @ts-ignore
+        const proxyHandler: ProxyHandler<T> = {
+            get: (_: T, propertyName: string) => {
+                mockConfig.propName = propertyName;
+                return function (...args: unknown[]) {
+                    mockConfig.isMethod = true;
+                    mockConfig.params = args;
+                };
+            },
+        };
+
+        // @ts-ignore
+        const proxyT = new Proxy<T>({} as unknown as T, proxyHandler);
+
+        configure(proxyT);
+
+        return this.propertyConfigMap[mockConfig.propName]?.getCallCount() ?? 0;
+    }
 
     /**
      * Clears call count for all methods.
@@ -97,18 +121,6 @@ class Mock<T> {
 
         return configureObject;
     }
-
-    /**
-     * Sets up a method to mock.
-     * @param fieldName The name of the method to mock.
-     * @returns A configurable object.
-     */
-    // setupField<K extends keyof T>(fieldName: K): ConfigureValue<T, K> {
-    //     const returns = new ConfigureValue<T, K>(this._object, fieldName);
-    //     this.propertyConfigMap[fieldName] = returns;
-
-    //     return returns;
-    // }
 }
 
 export { Mock };

@@ -45,9 +45,13 @@ for (const testCase of testCases) {
             mockObj.object()[testCase.propKey as unknown as keyof Cook];
 
         // Assert
+        console.log(testCase.propKey);
         expect(actualValue).toEqual(expectedValue);
         expect(
-            mockObj.getCallCount(testCase.propKey as unknown as keyof Cook)
+            mockObj.getCallCount(
+                (c) =>
+                    (c as unknown as Record<string, unknown>)[testCase.propKey]
+            )
         ).toEqual(1);
     });
 
@@ -66,7 +70,10 @@ for (const testCase of testCases) {
         // Assert
         expect(actualValue).toEqual(expectedValue);
         expect(
-            mockObj.getCallCount(testCase.propKey as unknown as keyof Cook)
+            mockObj.getCallCount(
+                (c) =>
+                    (c as unknown as Record<string, unknown>)[testCase.propKey]
+            )
         ).toEqual(2);
     });
 
@@ -83,7 +90,10 @@ for (const testCase of testCases) {
 
         // Assert
         expect(
-            mockObj.getCallCount(testCase.propKey as unknown as keyof Cook)
+            mockObj.getCallCount(
+                (c) =>
+                    (c as unknown as Record<string, unknown>)[testCase.propKey]
+            )
         ).toEqual(0);
     });
 
@@ -111,7 +121,10 @@ for (const testCase of testCases) {
         expect(setValue).toEqual(expectedValue);
         expect(unsetValue).toBe(null);
         expect(
-            mockObj.getCallCount(testCase.propKey as unknown as keyof Cook)
+            mockObj.getCallCount(
+                (c) =>
+                    (c as unknown as Record<string, unknown>)[testCase.propKey]
+            )
         ).toEqual(2);
     });
 }
@@ -127,7 +140,7 @@ test("returnsAsync works as expected", async () => {
 
     // Assert
     expect(actual).toEqual(expected);
-    expect(mockObj.getCallCount("getCookTime")).toEqual(1);
+    expect(mockObj.getCallCount((i) => i.getCookTime())).toEqual(1);
 });
 
 test("returns works as expected", () => {
@@ -141,7 +154,7 @@ test("returns works as expected", () => {
 
     // Assert
     expect(actual).toEqual(expected);
-    expect(mockObj.getCallCount("isCooked")).toEqual(1);
+    expect(mockObj.getCallCount((i) => i.isCooked)).toEqual(1);
 });
 
 test("returns works as expected and retains as expected", () => {
@@ -163,8 +176,8 @@ test("returns works as expected and retains as expected", () => {
     expect(retainVal1).toEqual(expected);
     expect(retainVal1).toEqual(retainVal2);
     expect(noRetainVal1).toEqual(expected);
-    expect(retainMockObj.getCallCount("isCooked")).toEqual(2);
-    expect(noRetainMockObj.getCallCount("isCooked")).toEqual(1);
+    expect(retainMockObj.getCallCount((i) => i.isCooked())).toEqual(2);
+    expect(noRetainMockObj.getCallCount((i) => i.isCooked())).toEqual(1);
 });
 
 test("returnsAsync works as expected and retains as expected", async () => {
@@ -186,8 +199,8 @@ test("returnsAsync works as expected and retains as expected", async () => {
     expect(retainVal1).toEqual(expected);
     expect(retainVal1).toEqual(retainVal2);
     expect(noRetainVal1).toEqual(expected);
-    expect(retainMockObj.getCallCount("getCookTime")).toEqual(2);
-    expect(noRetainMockObj.getCallCount("getCookTime")).toEqual(1);
+    expect(retainMockObj.getCallCount((i) => i.getCookTime())).toEqual(2);
+    expect(noRetainMockObj.getCallCount((i) => i.getCookTime())).toEqual(1);
 });
 
 test("setupMethod count is reset", async () => {
@@ -204,8 +217,8 @@ test("setupMethod count is reset", async () => {
     }
 
     const actualTimesCalled = {
-        getCookTime: mockObj.getCallCount("getCookTime"),
-        isCooked: mockObj.getCallCount("isCooked"),
+        getCookTime: mockObj.getCallCount((i) => i.isCooked()),
+        isCooked: mockObj.getCallCount((i) => i.isCooked()),
     };
 
     mockObj.resetCallCount();
@@ -213,6 +226,6 @@ test("setupMethod count is reset", async () => {
     // Assert
     expect(actualTimesCalled.getCookTime).toEqual(timesToCall);
     expect(actualTimesCalled.isCooked).toEqual(timesToCall);
-    expect(mockObj.getCallCount("getCookTime")).toEqual(0);
-    expect(mockObj.getCallCount("isCooked")).toEqual(0);
+    expect(mockObj.getCallCount((i) => i.isCooked())).toEqual(0);
+    expect(mockObj.getCallCount((i) => i.isCooked())).toEqual(0);
 });

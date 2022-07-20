@@ -18,35 +18,25 @@ const classMock = new Mock<MyClass>();
 
 **Class Members:**
 
-`setupMethod<K extends keyof T>(methodName: K): ConfigureReturn<T, K>`
+`setup<R>(configure: (instance: T) => R): ConfigureableMock<R>`
 
 Method to specify the method you want to setup and specify the return value of.
 
 **Example:**
 
 ```typescript
-classMock.setupMethod("someClassMethodName");
+classMock.setup((instance) => instance.someMethod());
 ```
 
-**Returns:**
-
-[ConfigureReturn\<T, K\>](./configurables/configure-return.md)
-
----
-
-`setupField<K extends keyof T>(fieldName: K): ConfigureValue<T, K>`
-
-Method to specify the field you want to setup and set the value of.
-
-**Example:**
+or
 
 ```typescript
-classMock.setupField("someClassMethodName");
+classMock.setup((instance) => instance.someField());
 ```
 
 **Returns:**
 
-[ConfigureValue\<T, K\>](./configurables/configure-value.md)
+[ConfigurableMock](./configurables/configurable-mock.md)
 
 ---
 
@@ -82,14 +72,20 @@ classMock.resetCallCount();
 
 ---
 
-`getCallCount(property: keyof T): number`
+`getCallCount<R>(configure: (instance: T) => R): number`
 
 Method to get the number of times a given property has had its value retrieved.
 
 **Example:**
 
 ```typescript
-classMock.getCallCount("myPropertyName");
+classMock.getCallCount((i) => i.myMethod());
+```
+
+or
+
+```typescript
+classMock.getCallCount((i) => i.myField);
 ```
 
 **Returns:**
