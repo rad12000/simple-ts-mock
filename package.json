@@ -1,5 +1,5 @@
 {
-    "name": "simple-js-mock",
+    "name": "simple-ts-mock",
     "version": "2.0.0",
     "description": "A small package to make mocking interfaces and classes more simple. And it's totally testing framework agnostic!",
     "main": "./lib/index.js",

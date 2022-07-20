@@ -1,4 +1,4 @@
-# simple-js-mock
+# simple-ts-mock
 
 ---
 
