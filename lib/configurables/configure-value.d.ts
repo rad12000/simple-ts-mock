@@ -1,11 +1,13 @@
-import { FieldOrNeverReturnType } from "../types";
-import { ConfigureableMock } from "./configureable-mock.interface";
-export declare class ConfigureValue<T, K extends keyof T> implements ConfigureableMock {
+import { ConfigureableMock } from "./configurable-mock.interface";
+export declare class ConfigureValue<R> implements ConfigureableMock<R> {
     private memberAccessedCount;
-    private readonly property;
+    private readonly propertyName;
     private readonly objectInstance;
-    constructor(objectInstance: T, propertyName: K);
-    set(value: FieldOrNeverReturnType<T[K]>, retain?: boolean): void;
+    constructor(objectInstance: Record<string, unknown>, propertyName: string);
+    returns(value: R, retain?: boolean | undefined): void;
+    returnsAsync(value: Awaited<R>, retain?: boolean | undefined): void;
+    throws(error: Error, retain?: boolean | undefined): void;
+    throwsAsync(error: Error, retain?: boolean | undefined): void;
     getCallCount(): number;
     resetCallCount(): void;
 }
