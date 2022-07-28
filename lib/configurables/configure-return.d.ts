@@ -11,4 +11,5 @@ export declare class ConfigureReturn<R> implements ConfigureableMock<R> {
     throwsAsync(error: Error, retain?: boolean): void;
     getCallCount: () => number;
     resetCallCount: () => void;
+    private wrapMethod;
 }

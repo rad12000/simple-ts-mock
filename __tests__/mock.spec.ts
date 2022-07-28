@@ -1,4 +1,4 @@
-import Mock, { It } from "../src";
+import { Mock, It } from "../src";
 import { Cook } from "./cook.interface";
 
 const testCases = [
