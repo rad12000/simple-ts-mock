@@ -1,4 +1,4 @@
-import Mock from "../src";
+import Mock, { It } from "../src";
 import { Cook } from "./cook.interface";
 
 const testCases = [
@@ -45,7 +45,6 @@ for (const testCase of testCases) {
             mockObj.object()[testCase.propKey as unknown as keyof Cook];
 
         // Assert
-        console.log(testCase.propKey);
         expect(actualValue).toEqual(expectedValue);
         expect(
             mockObj.getCallCount(
@@ -184,14 +183,16 @@ test("returnsAsync works as expected and retains as expected", async () => {
     // Arrange
     const expected = 42;
     const retainMockObj = new Mock<Cook>();
-    retainMockObj.setup((c) => c.getCookTime()).returnsAsync(expected, true);
+    retainMockObj
+        .setup((c) => c.getCookTime(It.isAny<string>()))
+        .returnsAsync(expected, true);
 
     const noRetainMockObj = new Mock<Cook>();
     noRetainMockObj.setup((c) => c.getCookTime()).returnsAsync(expected);
 
     // Act
-    const retainVal1 = await retainMockObj.object().getCookTime();
-    const retainVal2 = await retainMockObj.object().getCookTime();
+    const retainVal1 = await retainMockObj.object().getCookTime("hey");
+    const retainVal2 = await retainMockObj.object().getCookTime("hey");
     const noRetainVal1 = await noRetainMockObj.object().getCookTime();
 
     // Assert
