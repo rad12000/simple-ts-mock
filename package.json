@@ -6,7 +6,8 @@
     "types": "./lib/index.d.ts",
     "scripts": {
         "test": "jest",
-        "build": "rm -rf ./lib && tsc"
+        "build": "rm -rf ./lib && tsc",
+        "update:v": "./version.sh"
     },
     "keywords": [
         "js",
