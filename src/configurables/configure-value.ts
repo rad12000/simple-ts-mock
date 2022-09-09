@@ -1,128 +1,113 @@
+import { ObjectInstance } from "../types";
 import { ConfigureableMock } from "./configurable-mock.interface";
 
 export class ConfigureValue<R> implements ConfigureableMock<R> {
-    private memberAccessedCount: number;
+  private memberAccessedCount: number;
 
-    private readonly propertyName: string;
-    private readonly objectInstance: Record<string, unknown>;
+  private readonly propertyName: string;
+  private readonly objectInstance: ObjectInstance;
 
-    constructor(objectInstance: Record<string, unknown>, propertyName: string) {
-        this.objectInstance = objectInstance;
-        this.propertyName = propertyName;
-        this.memberAccessedCount = 0;
+  constructor(objectInstance: ObjectInstance, propertyName: string) {
+    this.objectInstance = objectInstance;
+    this.propertyName = propertyName;
+    this.memberAccessedCount = 0;
 
-        // Initial setup
-        Object.defineProperty(this.objectInstance, this.propertyName, {
-            get: () => {
-                this.memberAccessedCount++;
-            },
-            configurable: true,
-        });
-    }
+    // Initial setup
+    Object.defineProperty(this.objectInstance, this.propertyName, {
+      get: () => {
+        this.memberAccessedCount++;
+      },
+      configurable: true,
+    });
+  }
 
-    returns(value: R, retain?: boolean | undefined): void {
-        const privateKey = `_${this.propertyName.toString()}`;
+  returns(value: R, retain?: boolean | undefined): void {
+    const privateKey = `_${this.propertyName.toString()}`;
 
-        // Set the private value
-        this.objectInstance[privateKey] = value;
-        Object.defineProperty(this.objectInstance, this.propertyName, {
-            get: () => {
-                this.memberAccessedCount++;
+    // Set the private value
+    this.objectInstance[privateKey] = { value, active: true };
+    Object.defineProperty(this.objectInstance, this.propertyName, {
+      get: () => {
+        this.memberAccessedCount++;
+        let configuredObj = this.objectInstance[privateKey];
+        let { value: returnValue, active } = configuredObj;
 
-                let returnValue = this.objectInstance[privateKey];
-                if (!retain) {
-                    if (
-                        this.objectInstance[privateKey] !== null &&
-                        typeof this.objectInstance[privateKey] === "object"
-                    ) {
-                        returnValue = Array.isArray(
-                            this.objectInstance[privateKey]
-                        )
-                            ? [...(this.objectInstance[privateKey] as [])]
-                            : {
-                                  ...(this.objectInstance[
-                                      privateKey
-                                  ] as object),
-                              };
-                    }
+        if (!active) {
+          delete this.objectInstance[privateKey];
 
-                    this.objectInstance[privateKey] = null;
-                }
+          return;
+        }
 
-                return returnValue;
-            },
-            set: (val) => {
-                this.objectInstance[privateKey] = val;
-            },
-            configurable: true,
-        });
-    }
+        if (!retain) {
+          configuredObj.active = false;
+        }
 
-    returnsAsync(value: Awaited<R>, retain?: boolean | undefined): void {
-        const privateKey = `_${this.propertyName.toString()}`;
+        return returnValue;
+      },
+      set: (val) => {
+        this.objectInstance[privateKey].value = val;
+      },
+      configurable: true,
+    });
+  }
 
-        // Set the private value
-        this.objectInstance[privateKey] = value;
-        Object.defineProperty(this.objectInstance, this.propertyName, {
-            get: () => {
-                this.memberAccessedCount++;
+  returnsAsync(value: Awaited<R>, retain?: boolean | undefined): void {
+    const privateKey = `_${this.propertyName.toString()}`;
 
-                let returnValue = this.objectInstance[privateKey];
-                if (!retain) {
-                    if (
-                        this.objectInstance[privateKey] !== null &&
-                        typeof this.objectInstance[privateKey] === "object"
-                    ) {
-                        returnValue = Array.isArray(
-                            this.objectInstance[privateKey]
-                        )
-                            ? [...(this.objectInstance[privateKey] as [])]
-                            : {
-                                  ...(this.objectInstance[
-                                      privateKey
-                                  ] as object),
-                              };
-                    }
+    // Set the private value
+    this.objectInstance[privateKey] = { value, active: true };
+    Object.defineProperty(this.objectInstance, this.propertyName, {
+      get: () => {
+        this.memberAccessedCount++;
+        let configuredObj = this.objectInstance[privateKey];
+        let { value: returnValue, active } = configuredObj;
 
-                    this.objectInstance[privateKey] = null;
-                }
+        if (!active) {
+          delete this.objectInstance[privateKey];
 
-                return Promise.resolve(returnValue);
-            },
-            set: (val) => {
-                this.objectInstance[privateKey] = val;
-            },
-            configurable: true,
-        });
-    }
+          return;
+        }
 
-    throws(error: Error, retain?: boolean | undefined): void {
-        const privateKey = `_${this.propertyName.toString()}`;
+        if (!retain) {
+          configuredObj.active = false;
+        }
 
-        Object.defineProperty(this.objectInstance, this.propertyName, {
-            get: () => {
-                this.memberAccessedCount++;
-                throw error;
-            },
-            configurable: true,
-        });
-    }
+        return Promise.resolve(returnValue);
+      },
+      set: (val) => {
+        this.objectInstance[privateKey].value = val;
+      },
+      configurable: true,
+    });
+  }
 
-    throwsAsync(error: Error, retain?: boolean | undefined): void {
-        Object.defineProperty(this.objectInstance, this.propertyName, {
-            get: async () => {
-                this.memberAccessedCount++;
-                throw error;
-            },
-            configurable: true,
-        });
-    }
+  throws(error: Error, retain?: boolean | undefined): void {
+    const privateKey = `_${this.propertyName.toString()}`;
 
-    getCallCount(): number {
-        return this.memberAccessedCount;
-    }
+    Object.defineProperty(this.objectInstance, this.propertyName, {
+      get: () => {
+        this.memberAccessedCount++;
+        throw error;
+      },
+      configurable: true,
+    });
+  }
 
-    resetCallCount(): void {
-        this.memberAccessedCount = 0;
-    }
+  throwsAsync(error: Error, retain?: boolean | undefined): void {
+    Object.defineProperty(this.objectInstance, this.propertyName, {
+      get: async () => {
+        this.memberAccessedCount++;
+        throw error;
+      },
+      configurable: true,
+    });
+  }
+
+  getCallCount(): number {
+    return this.memberAccessedCount;
+  }
+
+  resetCallCount(): void {
+    this.memberAccessedCount = 0;
+  }
 }
