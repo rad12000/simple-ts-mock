@@ -15,4 +15,8 @@ declare type FlagExcludedTypes<Base, Type> = {
 declare type AllowedKeys<Base, Type> = FlagExcludedTypes<Base, Type>[keyof Base];
 declare type OmitType<Base, Type> = Pick<Base, AllowedKeys<Base, Type>>;
 export declare type InstanceFields<T> = OmitType<T, BasicMethod>;
+export declare type ObjectInstance = Record<string, {
+    value: unknown;
+    active: boolean;
+}>;
 export {};
