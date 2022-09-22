@@ -190,7 +190,7 @@ test("returnsAsync works as expected and retains as expected", async () => {
   expect(retainVal1).toEqual(expected);
   expect(retainVal1).toEqual(retainVal2);
   expect(noRetainVal1).toEqual(expected);
-  expect(retainMockObj.getCallCount((i) => i.getCookTime())).toEqual(2);
+  expect(retainMockObj.getCallCount((i) => i.getCookTime("hey"))).toEqual(2);
   expect(noRetainMockObj.getCallCount((i) => i.getCookTime())).toEqual(1);
 });
 
@@ -219,4 +219,18 @@ test("setupMethod count is reset", async () => {
   expect(actualTimesCalled.isCooked).toEqual(timesToCall);
   expect(mockObj.getCallCount((i) => i.isCooked())).toEqual(0);
   expect(mockObj.getCallCount((i) => i.isCooked())).toEqual(0);
+});
+
+test(`${Mock.prototype.getCallCount.name} should be based on method params if provided`, () => {
+  // Arrange
+  const mockCook = new Mock<Cook>();
+  mockCook.setup((c) => c.getCookTime(It.isAny<string | undefined>()));
+
+  // Act
+  mockCook.object().getCookTime("some name");
+
+  // Assert
+  expect(mockCook.getCallCount((c) => c.getCookTime("some other name"))).toBe(
+    0
+  );
 });

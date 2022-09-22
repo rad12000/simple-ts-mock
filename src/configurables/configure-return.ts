@@ -8,6 +8,7 @@ export class ConfigureReturn<R> implements ConfigureableMock<R> {
   private readonly propertyName: string;
   private readonly objectInstance: ObjectInstance;
   private readonly params: unknown[];
+  actualParams?: unknown[];
 
   constructor(
     objectInstance: ObjectInstance,
@@ -76,6 +77,7 @@ export class ConfigureReturn<R> implements ConfigureableMock<R> {
   private wrapMethod(method?: BasicMethod): void {
     const propertyValueWrapper = (...args: unknown[]) => {
       let isValidCall = true;
+      this.actualParams = args;
 
       try {
         for (let i = 0; i < args.length; i++) {
