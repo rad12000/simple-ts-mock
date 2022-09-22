@@ -1,4 +1,5 @@
 import { ObjectInstance } from "./types";
+import { anyValue } from "./configurables/its/it-is-any";
 import {
   ConfigureableMock,
   ConfigureReturn,
@@ -47,7 +48,36 @@ class Mock<T> {
 
     configure(proxyT);
 
-    return this.propertyConfigMap[mockConfig.propName]?.getCallCount() ?? 0;
+    const mockedProp = this.propertyConfigMap[mockConfig.propName];
+
+    if (!mockedProp) {
+      return 0;
+    }
+
+    if (mockConfig.isMethod) {
+      const mockedMethod = mockedProp as ConfigureReturn<T>;
+
+      if (!mockedMethod.actualParams) {
+        return 0;
+      }
+
+      const paramLength = [
+        mockedMethod.actualParams.length,
+        mockConfig.params.length,
+      ].sort((a, b) => b - a)[0];
+
+      for (let i = 0; i < paramLength; i++) {
+        if (mockConfig.params[i] == anyValue) {
+          continue;
+        }
+
+        if (mockedMethod.actualParams[i] !== mockConfig.params[i]) {
+          return 0;
+        }
+      }
+    }
+
+    return mockedProp.getCallCount();
   }
 
   /**

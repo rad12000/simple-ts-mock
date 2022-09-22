@@ -5,6 +5,7 @@ export declare class ConfigureReturn<R> implements ConfigureableMock<R> {
     private readonly propertyName;
     private readonly objectInstance;
     private readonly params;
+    actualParams?: unknown[];
     constructor(objectInstance: ObjectInstance, propertyName: string, params: unknown[]);
     returns(value: R, retain?: boolean): void;
     returnsAsync(value: Awaited<R>, retain?: boolean): void;
