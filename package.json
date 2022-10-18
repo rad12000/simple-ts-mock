@@ -9,6 +9,9 @@
         "build": "rm -rf ./lib && tsc",
         "update:v": "./version.sh"
     },
+    "files": [
+        "lib/"
+    ],
     "keywords": [
         "js",
         "test",
