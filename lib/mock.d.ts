@@ -1,4 +1,4 @@
-import { ConfigureableMock } from "./configurables";
+import { ConfigurableMethod, ConfigurableValue } from "./configurables";
 declare class Mock<T> {
     private readonly propertyConfigMap;
     private readonly _object;
@@ -6,6 +6,6 @@ declare class Mock<T> {
     getCallCount<R>(configure: (instance: T) => R): number;
     resetCallCount(): void;
     object(): T;
-    setup<R>(configure: (instance: T) => R): ConfigureableMock<R>;
+    setup<R>(configure: (instance: T) => R): ConfigurableMethod<R> | ConfigurableValue<R>;
 }
 export { Mock };
