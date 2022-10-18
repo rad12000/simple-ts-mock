@@ -10,10 +10,12 @@ while [ $# -gt 0 ] ; do
 done
 
 npm run build &&
-git add ./ && 
-git commit -m "Generated new build for versioning" && 
+if [[ $(git diff --stat) != '' ]]; then
+    git add ./ && 
+    git commit -m "Generated new build for versioning"
+fi
 versionOutput=$(npm version $newVersion) &&
-git add ./ && 
-git commit -m "Did a ${newVersion} package version -> ${versionOutput}" &&
-git push &&
-npm publish
+# git add ./ && 
+# git commit -m "Did a ${newVersion} package version -> ${versionOutput}" &&
+# git push &&
+# npm publish
