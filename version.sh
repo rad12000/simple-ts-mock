@@ -13,8 +13,8 @@ npm run build &&
 if [[ $(git diff --stat) != '' ]]; then
     git add ./ && 
     git commit -m "Generated new build for versioning"
-fi
-versionOutput=$(npm version $newVersion) &&
+fi &&
+versionOutput=$(npm version $newVersion)
 # git add ./ && 
 # git commit -m "Did a ${newVersion} package version -> ${versionOutput}" &&
 # git push &&
