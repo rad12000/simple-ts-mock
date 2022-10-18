@@ -6,7 +6,7 @@ import {
     ConfigureReturn,
     ConfigureValue,
 } from "./configurables";
-import { Callable } from "./configurables/callable.interface";
+import { Callable } from "./configurables/interfaces/callable.interface";
 
 /**
  * A class which simplifies mocking of interfaces and classes alike.

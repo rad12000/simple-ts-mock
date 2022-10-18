@@ -1,5 +1,5 @@
 import { ObjectInstance } from "../types";
-import { ConfigurableValue } from "./configurable-value.interface";
+import { ConfigurableValue, MockReturns, MockThrows } from "./interfaces";
 
 export class ConfigureValue<R> implements ConfigurableValue<R> {
     private memberAccessedCount: number;
@@ -19,6 +19,14 @@ export class ConfigureValue<R> implements ConfigurableValue<R> {
             },
             configurable: true,
         });
+    }
+
+    callback<T extends unknown[]>(
+        _: (...args: T) => void
+    ): MockReturns<R> & MockThrows {
+        throw new Error(
+            "Callbacks may only be used when configuring method calls, not fields!"
+        );
     }
 
     returns(value: R, retain?: boolean | undefined): void {

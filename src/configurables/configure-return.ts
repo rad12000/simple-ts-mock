@@ -1,8 +1,6 @@
 import { BasicMethod, ObjectInstance } from "../types";
-import { ConfigurableMethod } from "./configurable-method.interface";
+import { ConfigurableMethod, MockReturns, MockThrows } from "./interfaces";
 import { anyValue } from "./its";
-import { MockReturns } from "./returns.interface";
-import { MockThrows } from "./throws.interface";
 
 export class ConfigureReturn<R> implements ConfigurableMethod<R> {
     private methodCallsCount: number;
@@ -109,7 +107,7 @@ export class ConfigureReturn<R> implements ConfigurableMethod<R> {
             this.methodCallsCount++;
 
             if (this.callbackFunc) {
-                this.callbackFunc(args);
+                this.callbackFunc(...args);
             }
 
             if (method !== undefined) {
