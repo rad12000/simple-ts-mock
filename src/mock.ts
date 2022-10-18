@@ -1,8 +1,7 @@
 import { ObjectInstance } from "./types";
 import { anyValue } from "./configurables/its/it-is-any";
 import {
-    ConfigurableMethod,
-    ConfigurableValue,
+    ConfigurableMock,
     ConfigureReturn,
     ConfigureValue,
 } from "./configurables";
@@ -12,19 +11,13 @@ import { Callable } from "./configurables/interfaces/callable.interface";
  * A class which simplifies mocking of interfaces and classes alike.
  */
 class Mock<T> {
-    private readonly propertyConfigMap: Record<
-        string,
-        ConfigurableMethod<T> | ConfigurableValue<T>
-    >;
+    private readonly propertyConfigMap: Record<string, ConfigurableMock<T>>;
 
     private readonly _object: T;
 
     constructor() {
         this._object = {} as unknown as T;
-        this.propertyConfigMap = {} as Record<
-            string,
-            ConfigurableMethod<T> | ConfigurableValue<T>
-        >;
+        this.propertyConfigMap = {} as Record<string, ConfigurableMock<T>>;
     }
 
     /**
@@ -111,9 +104,7 @@ class Mock<T> {
      * @param configure a handler to specify the property to mock.
      * @returns A configurable object.
      */
-    setup<R>(
-        configure: (instance: T) => R
-    ): ConfigurableMethod<R> | ConfigurableValue<R> {
+    setup<R>(configure: (instance: T) => R): ConfigurableMock<R> {
         const mockConfig: {
             isMethod: boolean;
             params: unknown[];
@@ -136,7 +127,7 @@ class Mock<T> {
 
         configure(proxyT);
 
-        let configureObject: ConfigurableValue<R> | ConfigurableValue<R>;
+        let configureObject: ConfigurableMock<R>;
         if (mockConfig.isMethod) {
             configureObject = new ConfigureReturn<R>(
                 this._object as ObjectInstance,
@@ -153,7 +144,7 @@ class Mock<T> {
         (
             this.propertyConfigMap as unknown as Record<
                 string,
-                ConfigurableMethod<R> | ConfigurableValue<R>
+                ConfigurableMock<R>
             >
         )[mockConfig.propName] = configureObject;
 

@@ -1,6 +1,6 @@
 import { ObjectInstance } from "../types";
-import { ConfigurableMethod, MockReturns, MockThrows } from "./interfaces";
-export declare class ConfigureReturn<R> implements ConfigurableMethod<R> {
+import { ConfigurableMock, MockReturns, MockThrows } from "./interfaces";
+export declare class ConfigureReturn<R> implements ConfigurableMock<R> {
     private methodCallsCount;
     private readonly propertyName;
     private readonly objectInstance;

@@ -1,8 +1,8 @@
 import { BasicMethod, ObjectInstance } from "../types";
-import { ConfigurableMethod, MockReturns, MockThrows } from "./interfaces";
+import { ConfigurableMock, MockReturns, MockThrows } from "./interfaces";
 import { anyValue } from "./its";
 
-export class ConfigureReturn<R> implements ConfigurableMethod<R> {
+export class ConfigureReturn<R> implements ConfigurableMock<R> {
     private methodCallsCount: number;
 
     private readonly propertyName: string;

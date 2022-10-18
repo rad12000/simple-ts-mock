@@ -21,4 +21,5 @@ if [[ $(git diff --stat) != '' ]]; then
     git commit -m "Did a ${newVersion} package version -> ${versionOutput}"
 fi &&
 git push &&
-npm publish
+npm publish &&
+echo "Published to NPM"

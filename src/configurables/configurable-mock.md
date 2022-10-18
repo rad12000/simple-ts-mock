@@ -4,6 +4,35 @@ The class used to configure the value of a mocked property.
 
 **Class Members:**
 
+`callback<...T>(func: (...args: ...T) => void): MockReturns<R> & MockThrows<R>`
+
+Method to configure a callback on a mocked method, which will be called with the parameter values that the mocked method is given when the code is executed. This can only be used when mocking methods. Attempting to do so on a field will result in an Error being thrown.
+
+**Example:**
+
+```typescript
+classMock
+    .setup((instance) =>
+        instance.buildPerson(It.isAny<string>(), It.isAny<number>())
+    )
+    .callback((name: string, age: number) => {
+        expect(name).toEqual("Some name");
+    })
+    .returns("my return value", false);
+```
+
+or
+
+```typescript
+// Not allowed. Throws and Error.
+classMock.setup((instance) => instance.someField).callback(() => {});
+```
+
+**Returns:**
+[MockReturns<R>](./interfaces/returns.interface.ts) & [MockThrows](./interfaces/throws.interface.ts)
+
+---
+
 `returns<R>(value: R, retain = false): void`
 
 Method to set the return value on a mocked property. Accepts an optional `retain` parameter which determines if after the value is read once it is retained or reset.
