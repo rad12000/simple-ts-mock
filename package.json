@@ -23,7 +23,7 @@
     "author": "Chad Bekmezian",
     "license": "ISC",
     "repository": {
-        "url": "https://github.com/rad12000/simple-js-mock"
+        "url": "https://github.com/rad12000/simple-ts-mock"
     },
     "devDependencies": {
         "@types/jest": "^28.1.6",
