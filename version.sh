@@ -14,7 +14,8 @@ if [[ $(git diff --stat) != '' ]]; then
     git add ./ && 
     git commit -m "Generated new build for versioning"
 fi &&
-versionOutput=$(npm version $newVersion)
+versionOutput=$(npm version $newVersion) && 
+echo versionOutput
 # git add ./ && 
 # git commit -m "Did a ${newVersion} package version -> ${versionOutput}" &&
 # git push &&
