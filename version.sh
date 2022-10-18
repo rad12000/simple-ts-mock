@@ -16,7 +16,7 @@ if [[ $(git diff --stat) != '' ]]; then
 fi &&
 versionOutput=$(npm version $newVersion) && 
 echo $versionOutput
-# git add ./ && 
-# git commit -m "Did a ${newVersion} package version -> ${versionOutput}" &&
-# git push &&
-# npm publish
+git add ./ && 
+git commit -m "Did a ${newVersion} package version -> ${versionOutput}" &&
+git push &&
+npm publish
