@@ -1,10 +1,11 @@
 import { ObjectInstance } from "../types";
-import { ConfigureableMock } from "./configurable-mock.interface";
-export declare class ConfigureValue<R> implements ConfigureableMock<R> {
+import { ConfigurableValue, MockReturns, MockThrows } from "./interfaces";
+export declare class ConfigureValue<R> implements ConfigurableValue<R> {
     private memberAccessedCount;
     private readonly propertyName;
     private readonly objectInstance;
     constructor(objectInstance: ObjectInstance, propertyName: string);
+    callback<T extends unknown[]>(_: (...args: T) => void): MockReturns<R> & MockThrows;
     returns(value: R, retain?: boolean | undefined): void;
     returnsAsync(value: Awaited<R>, retain?: boolean | undefined): void;
     throws(error: Error, retain?: boolean | undefined): void;
